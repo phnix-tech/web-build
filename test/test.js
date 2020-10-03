@@ -6,7 +6,7 @@ import logging from "../fe/Logging";
 import fn from "../functions";
 import feFn from "../fe/Functions";
 
-describe("gs-common/be/functions", function () {
+describe("be/functions", function () {
     describe("#createMeta", function () {
         const
             metaFile = path.join(__dirname, "./meta.json"),
@@ -60,7 +60,7 @@ describe("gs-common/be/functions", function () {
     });
 });
 
-describe("gs-common/fe/Functions", function () {
+describe("fe/Functions", function () {
     describe("#isValidEmail", function () {
         const email = "jefy.lee@garmin.com";
         it(`${email} is true`, function () {

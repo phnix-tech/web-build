@@ -155,14 +155,6 @@
             return url;
         };
 
-        if (isBrowserEnv) {
-            // attach getURLParameter to window.location object for call method easily
-            location.getURLParameter = location.getURLParameter || this.getURLParameter;
-            location.replaceURLParameter = location.replaceURLParameter || this.replaceURLParameter;
-            location.removeURLParameter = location.removeURLParameter || this.removeURLParameter;
-            location.appendQueryString = location.appendQueryString || this.appendQueryString;
-        }
-
         /**
          * set browser cookie
          * @memberOf fe/Functions
@@ -215,33 +207,9 @@
             return "";
         }
 
-        /**
-         * @memberOf fe/Functions
-         * @method isCrossDay
-         * @param {number} startTime
-         * @param {number} endTime
-         * @returns {boolean}
-         */
-        function isCrossDay (startTime, endTime) {
-            let startDate = new Date(startTime),
-                endDate = new Date(endTime);
-            return startDate.getFullYear() !== endDate.getFullYear() ||
-                startDate.getMonth() !== endDate.getMonth() ||
-                startDate.getDate() !== endDate.getDate();
-        }
-
         this.setCookie = setCookie;
         this.getCookie = getCookie;
         this.deleteCookie = deleteCookie;
-        this.isCrossDay = isCrossDay;
-
-        if (isBrowserEnv) {
-            // for dependency reason, we attach some method to location
-            // avoid of using location.xxx as possible
-            location.__getCookie = location.__getCookie || this.getCookie;
-            location.__deleteCookie = location.__deleteCookie || this.deleteCookie;
-            location.__setCookie = location.__setCookie || this.setCookie;
-        }
 
         /**
          * encode number to string by ascii
@@ -572,15 +540,6 @@
                 }
                 return txt || "N/A";
             };
-
-            if (isBrowserEnv) {
-                // attach util methods on navigator for easy access
-                navigator.browser = this.browser;
-                navigator.browserTxt = this.browserTxt;
-                navigator.browserDetect = this.browserDetect;
-                navigator.os = this.os;
-                navigator.osTxt = this.osTxt;
-            }
         }.call(this));
 
         /**
@@ -631,40 +590,6 @@
          */
         this.isDomainFormat = function (domain) {
             return !!domain.match(/^((?:(?:(?:\w[.\-+]?)*)\w)+)((?:(?:(?:\w[.\-+]?){0,62})\w)+)\.(\w{2,6})$/);
-        };
-
-        /**
-         * check whether the phone format is valid
-         * @memberOf fe/Functions
-         * @method checkPhoneFormat
-         * @return {boolean}
-         */
-        this.checkPhoneFormat = function (countryCode, phone) {
-            let isValid = true,
-                countryCodeList = {
-                    HONGKONG: ["Hongkong", "+852"],
-                    MACAO: ["Macao", "+853"],
-                    CHINA: ["China", "+86"],
-                    TAIWAN: ["Taiwan", "+886"]
-                };
-            if (!countryCode || !phone || isNaN(phone)) {
-                return false;
-            }
-            switch (countryCode) {
-                case countryCodeList.CHINA[1]:
-                    isValid = phone.length === 11 && phone.split("")[0] === "1";
-                    break;
-                case countryCodeList.HONGKONG[1]:
-                    isValid = phone.length === 8;
-                    break;
-                case countryCodeList.MACAO[1]:
-                    isValid = phone.length === 8  && phone.split("")[0] === "6";
-                    break;
-                case countryCodeList.TAIWAN[1]:
-                    isValid = phone.length === 9  && phone.split("")[0] === "9";
-                    break;
-            }
-            return isValid;
         };
     }.call(Functions.prototype));
 

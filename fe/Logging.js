@@ -301,21 +301,15 @@
         msgs = msgs.map(e => e instanceof Error ?  e.toString() + "\n" + "TRACE: " + e.stack + "\n" : e);
         msgs = [t, level.padEnd ? level.padEnd(5, " ") : level].concat(msgs);
 
-        // add extra message for debug error
         // ONLY in browser env
         if (isBrowserEnv &&
             level === Logging.LEVEL.ERROR) {
             msgs = msgs.concat([
                 "", // separator line
-                "VERSION: " + (navigator._version || "N/A"),
-                "UID: " + (navigator._uid || "N/A"),
-                "BROWSER: " + (navigator.browserTxt ? navigator.browserTxt() : "N/A"),
-                "OS: " + (navigator.osTxt ? navigator.osTxt() : "N/A"),
                 "UA: " + navigator.userAgent,
                 "URL: " + location.href
             ].join("\n"));
         }
-
         return msgs;
     }
 

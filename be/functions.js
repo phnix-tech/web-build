@@ -100,27 +100,10 @@ module.exports = {
 
         return meta;
     },
-    /**
-     * resolve garmin hostname if found otherwise localhost
-     * @returns {string}
-     */
-    hostname: function () {
-        let hostname;
-        if (process.platform.toLowerCase() === "win32") {
-            // https://nodejs.org/api/os.html#os_os_hostname
-            hostname = require("os").hostname();
-            // garmin hostname format c3-gis-jefy, t1-gis-zusan
-            if (/^(c3|t1)-/i.test(hostname) &&
-                !/ad\.garmin\.com$/i.test(hostname)) {
-                hostname = hostname.toLowerCase() + ".ad.garmin.com";
-            }
-        }
-        hostname = hostname || "localhost";
-        return hostname;
-    },
+
     /**
      * @see https://www.npmjs.com/package/portfinder
-     * @returns {{PortfinderCallback: PortfinderCallback; PortFinderOptions: PortFinderOptions; basePort: number; getPort; getPorts; getPortPromise}}
+     * @returns {*}
      */
     portfinder: function () {
         return portfinder;
