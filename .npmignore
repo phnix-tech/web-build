@@ -6,7 +6,7 @@ eslint/.eslintcache
 stylelint/.stylelintcache*
 
 # jsdoc output
-docs/*
+docs/
 
 # Editor directories and files
 .idea

@@ -1,56 +1,49 @@
 {
-    "name": "gs-common",
-    "version": "0.2.1",
-    "description": "garmin sports common libraries",
-    "author": "Leejefy <Jefy.Lee@garmin.com>",
-    "homepage": "https://confluence.garmin.com/display/CDMAPAPP/GS+-+npm+gs-common",
-    "dependencies": {
-        "mkdirp": "0.5.1",
-        "tar": "4.4.8",
-        "chalk": "2.4.2",
-        "semver": "5.6.0",
-        "shelljs": "0.8.3",
-        "portfinder": "1.0.20"
-    },
-    "devDependencies": {
-        "requirejs-text": "2.0.15",
-        "grapheme-splitter": "1.0.2",
-        "gs-lint": "0.2.1",
-        "@grmn/test": "0.0.1",
-        "mocha": "6.2.0",
-        "@grmn/doc": "0.0.1",
-        "uglify-js": "2.8.29",
-        "npm-run-all": "4.1.5",
-        "rimraf": "3.0.0"
-    },
-    "scripts": {
-        "build": "run-s pre-build build-task",
-        "test": "mocha --config ./node_modules/@grmn/test/.mocharc.js",
-        "check-versions": "node ./build/check-versions.js",
-        "pre-build": "run-s check-versions eslint test",
-        "build-task": "run-p jsdoc build-jshashtable build-grapheme-splitter build-i18n build-numberformatter build-requirejs-text build-fe",
-        "build-jshashtable": "uglifyjs ./lib/src/jshashtable.js --compress --mangle --output ./dist/lib/min/jshashtable.js",
-        "build-i18n": "uglifyjs ./lib/mixed/jquery/jquery.i18n.properties.js --compress --mangle --output ./dist/lib/min/jquery.i18n.properties.js",
-        "build-numberformatter": "uglifyjs ./lib/mixed/jquery/jquery.numberformatter.js --compress --mangle --output ./dist/lib/min/jquery.numberformatter.js",
-        "build-requirejs-text": "uglifyjs ./node_modules/requirejs-text/text.js --compress --mangle --output ./dist/lib/min/requirejs-text.js",
-        "build-grapheme-splitter": "uglifyjs ./lib/src/grapheme-splitter.js --compress --mangle --output ./dist/lib/min/grapheme-splitter.js",
-        "build-fe": "run-s babel-fe uglify-fe",
-        "babel-fe": "babel ./fe --out-dir ./dist/fe",
-        "uglify-fe": "uglifyjs ./dist/fe/Localizer.js --compress --mangle --output ./dist/fe/Localizer.js && uglifyjs ./dist/fe/Logging.js --compress --mangle --output ./dist/fe/Logging.js && uglifyjs ./dist/fe/Lang.js --compress --mangle --output ./dist/fe/Lang.js && uglifyjs ./dist/fe/Functions.js --compress --mangle --output ./dist/fe/Functions.js && uglifyjs ./dist/fe/GSMJsBridge.js --compress --mangle --output ./dist/fe/GSMJsBridge.js && uglifyjs ./dist/fe/model/AppVariable.js --compress --mangle --output ./dist/fe/model/AppVariable.js && uglifyjs ./dist/fe/service/Service.js --compress --mangle --output ./dist/fe/service/Service.js && uglifyjs ./dist/fe/common/util.js --compress --mangle --output ./dist/fe/common/util.js",
-        "eslint": "run-p eslint-be eslint-fe",
-        "eslint-fe": "eslint --config ./node_modules/gs-lint/eslint/.eslintrc-fe.js ./fe/**",
-        "eslint-be": "eslint --config ./node_modules/gs-lint/eslint/.eslintrc.js ./*.js ./be/** ./test/**/*.js",
-        "clean:docs": "rimraf ./docs",
-        "_jsdoc": "jsdoc -c ./.jsdocrc.js",
-        "jsdoc": "run-s clean:docs _jsdoc"
-    },
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/050934/gs-common.git"
-    },
-    "engines": {
-        "node": ">= 8.9.4",
-        "npm": ">= 5.6.0"
-    }
+  "name": "@web-io/build",
+  "version": "0.2.1",
+  "description": "web builds scripts",
+  "author": "leejefy <050934@gmail.com>",
+  "homepage": "https://gitee.com/phoenix-tech/web-build",
+  "dependencies": {
+    "mkdirp": "0.5.1",
+    "tar": "4.4.8",
+    "chalk": "2.4.2",
+    "semver": "5.6.0",
+    "shelljs": "0.8.3",
+    "portfinder": "1.0.20"
+  },
+  "devDependencies": {
+    "gs-lint": "0.2.1",
+    "@grmn/test": "0.0.1",
+    "mocha": "6.2.0",
+    "@grmn/doc": "0.0.1",
+    "uglify-js": "2.8.29",
+    "npm-run-all": "4.1.5",
+    "rimraf": "3.0.0"
+  },
+  "scripts": {
+    "build": "run-s pre-build build-task",
+    "test": "mocha --config ./node_modules/@grmn/test/.mocharc.js",
+    "check-versions": "node ./build/check-versions.js",
+    "pre-build": "run-s check-versions eslint test",
+    "build-task": "run-p jsdoc build-fe",
+    "build-fe": "run-s babel-fe uglify-fe",
+    "babel-fe": "babel ./fe --out-dir ./dist/fe",
+    "uglify-fe": "uglifyjs ./dist/fe/Logging.js --compress --mangle --output ./dist/fe/Logging.js && uglifyjs ./dist/fe/Functions.js --compress --mangle --output ./dist/fe/Functions.js",
+    "eslint": "run-p eslint-be eslint-fe",
+    "eslint-fe": "eslint --config ./node_modules/gs-lint/eslint/.eslintrc-fe.js ./fe/**",
+    "eslint-be": "eslint --config ./node_modules/gs-lint/eslint/.eslintrc.js ./*.js ./be/** ./test/**/*.js",
+    "clean:docs": "rimraf ./docs",
+    "_jsdoc": "jsdoc -c ./.jsdocrc.js",
+    "jsdoc": "run-s clean:docs _jsdoc"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/phoenix-tech/web-build.git"
+  },
+  "engines": {
+    "node": ">= 12.16.1",
+    "npm": ">= 6.13.4"
+  }
 }
