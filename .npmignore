@@ -1,0 +1,17 @@
+# ignore eslint cache files
+eslint/.cache_*
+eslint/.eslintcache
+
+# ignore stylelint cache files
+stylelint/.stylelintcache*
+
+# jsdoc output
+docs/*
+
+# Editor directories and files
+.idea
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
