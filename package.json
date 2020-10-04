@@ -1,6 +1,6 @@
 {
   "name": "@web-io/build",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "web builds scripts",
   "author": "leejefy <050934@gmail.com>",
   "homepage": "https://gitee.com/phoenix-tech/web-build",
@@ -14,17 +14,17 @@
   },
   "devDependencies": {
     "@web-io/lint": "0.4.1",
+    "@web-io/test": "0.0.2",
+    "@web-io/jsdoc": "0.0.2",
     "eslint": "6.8.0",
-    "@grmn/test": "0.0.1",
     "mocha": "6.2.0",
-    "@grmn/doc": "0.0.1",
     "uglify-js": "2.8.29",
     "npm-run-all": "4.1.5",
     "rimraf": "3.0.0"
   },
   "scripts": {
     "build": "run-s pre-build build-task",
-    "test": "mocha --config ./node_modules/@grmn/test/.mocharc.js",
+    "test": "mocha --config ./node_modules/@web-io/test/.mocharc.js",
     "check-versions": "node ./build/check-versions.js",
     "pre-build": "run-s check-versions eslint test",
     "build-task": "run-p jsdoc build-fe",
