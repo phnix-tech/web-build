@@ -13,7 +13,7 @@
     "portfinder": "1.0.20"
   },
   "devDependencies": {
-    "@web-io/lint": "0.4.1",
+    "@web-io/lint": "0.5.0",
     "@web-io/test": "0.0.2",
     "@web-io/jsdoc": "0.0.2",
     "eslint": "6.8.0",
@@ -32,8 +32,8 @@
     "babel-fe": "babel ./fe --out-dir ./dist/fe",
     "uglify-fe": "uglifyjs ./dist/fe/Logging.js --compress --mangle --output ./dist/fe/Logging.js && uglifyjs ./dist/fe/Functions.js --compress --mangle --output ./dist/fe/Functions.js",
     "eslint": "run-p eslint-be eslint-fe",
-    "eslint-fe": "eslint --config ./node_modules/@web-io/lint/eslint/.eslintrc-fe.js ./fe/**",
-    "eslint-be": "eslint --config ./node_modules/@web-io/lint/eslint/.eslintrc.js ./*.js ./be/** ./test/**/*.js",
+    "eslint-be": "eslint ./*.js ./be/** ./test/**/*.js",
+    "eslint-fe": "eslint --config ./.eslintrc-fe.js ./fe/**",
     "clean:docs": "rimraf ./docs",
     "_jsdoc": "jsdoc -c ./.jsdocrc.js",
     "jsdoc": "run-s clean:docs _jsdoc"
