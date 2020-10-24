@@ -1,5 +1,5 @@
-const logging = require("@web-io/build/fe/Logging");
-const functions = require("@web-io/build/functions");
+const logging = require("../fe/Logging");
+const functions = require("../functions");
 
 // web builds external deps
 module.exports = {

@@ -6,8 +6,8 @@
  * @returns {*} configuration object
  */
 module.exports = function (cfg) {
-  Object.assign(cfg.rules, {
-    // add extra rules
+  cfg.rules = Object.assign(cfg.rules || {}, {
+    // add or override rules
   });
 
   return cfg;

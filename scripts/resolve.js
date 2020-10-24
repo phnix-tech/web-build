@@ -1,9 +1,9 @@
-const
-  path = require("path"),
-  projectRoot = path.join(__dirname, "../../..");
+const path = require("path");
+// 当前位置`./node_modules/@web-io/build/scripts`
+const projectRoot = path.join(__dirname, "../../../..");
 
 /**
- * 基于项目根路径解析相对路径，假设默认当前文件位于`/src/common/build`第三级目录
+ * 基于项目根路径解析相对路径
  * @returns {string}
  */
 function resolve () {
