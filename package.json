@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "@web-io/lint": "0.5.0",
-    "@web-io/test": "0.0.2",
-    "@web-io/jsdoc": "0.0.2",
+    "@web-io/test": "0.0.3",
+    "@web-io/jsdoc": "0.0.3",
     "eslint": "6.8.0",
     "mocha": "6.2.0",
     "uglify-js": "2.8.29",
