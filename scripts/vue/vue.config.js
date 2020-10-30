@@ -1,5 +1,7 @@
+const env = require("../env");
+env.transformEnv();
+
 const
-  env = require("../env"),
   resolve = require("../resolve"),
   proxycfg = require("../proxycfg"),
   logFn = require("../logFn"),

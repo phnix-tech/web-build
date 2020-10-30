@@ -1,9 +1,11 @@
+const env = require("../env");
+env.transformEnv();
+
 const
   paths = require("react-scripts/config/paths"),
   {logging} = require("../web-build"),
   resolve = require("../resolve"),
   proxycfg = require("../proxycfg"),
-  env = require("../env"),
   logFn = require("../logFn"),
   prepareUrls = require("./prepareUrls");
 
