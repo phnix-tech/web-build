@@ -2,6 +2,14 @@ const fs = require("fs");
 const logging = require("../fe/Logging");
 const resolve = require("./resolve");
 
+function isVue () {
+  return fs.existsSync(resolve("node_modules/@vue"));
+}
+
+function isReact () {
+  return fs.existsSync(resolve("node_modules/react-scripts"));
+}
+
 // https://webpack.js.org/configuration/mode/
 module.exports = {
   isDev () {
@@ -11,6 +19,10 @@ module.exports = {
   isProd () {
     return process.env.NODE_ENV === "production";
   },
+
+  isVue,
+
+  isReact,
 
   /**
    * 转换以`APP_`为前缀的环境变量到vue cli、create react app环境变量格式
@@ -28,12 +40,12 @@ module.exports = {
       const val = process.env[env];
       let key = "";
       if (
-        fs.existsSync(resolve("node_modules/react-scripts")) &&
+        isReact() &&
         !process.env.hasOwnProperty(`REACT_${env}`)
       ) {
         key = `REACT_${env}`;
       } else if (
-        fs.existsSync(resolve("node_modules/@vue")) &&
+        isVue() &&
         !process.env.hasOwnProperty(`VUE_${env}`)
       ) {
         key = `VUE_${env}`;

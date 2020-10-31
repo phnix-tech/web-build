@@ -1,3 +1,6 @@
+const debugUtils = require("../debug-utils");
+debugUtils.createLocalDebugJs();
+
 const env = require("../env");
 env.transformEnv();
 
