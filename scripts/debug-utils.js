@@ -29,6 +29,55 @@ function createLocalDebugJs () {
   }
 }
 
+/**
+ * 生产环境注释debug导入
+ */
+function disableDebug () {
+  if (!env.isProd()) {
+    return;
+  }
+  const debugs = ["debug.js", "debug.ts"];
+  for (const debug of debugs) {
+    const debugFile = resolve("src", debug);
+    if (fs.existsSync(debugFile)) {
+      // eslint-disable-next-line quotes
+      const importStatement = `import "./debug.local";`;
+      const content = fs.readFileSync(debugFile, "utf-8");
+      if (content.indexOf("// " + importStatement) === -1) {
+        fs.writeFileSync(
+          debugFile,
+          content.replace(importStatement, "// " + importStatement)
+        );
+      }
+      break;
+    }
+  }
+}
+
+/**
+ * 构建完成恢复debug导入
+ */
+function restoreDebug () {
+  const debugs = ["debug.js", "debug.ts"];
+  for (const debug of debugs) {
+    const debugFile = resolve("src", debug);
+    if (fs.existsSync(debugFile)) {
+      // eslint-disable-next-line quotes
+      const importStatement = `import "./debug.local";`;
+      const content = fs.readFileSync(debugFile, "utf-8");
+      if (content.indexOf("// " + importStatement) !== -1) {
+        fs.writeFileSync(
+          debugFile,
+          content.replace("// " + importStatement, importStatement)
+        );
+      }
+      break;
+    }
+  }
+}
+
 module.exports = {
-  createLocalDebugJs
+  createLocalDebugJs,
+  disableDebug,
+  restoreDebug
 };

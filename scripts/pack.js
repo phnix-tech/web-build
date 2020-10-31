@@ -1,3 +1,4 @@
+const debugUtils = require("./debug-utils");
 const {logging, functions: fn} = require("./web-build");
 const resolve = require("./resolve");
 // 项目构建配置
@@ -13,3 +14,6 @@ fn.tar.create({
 }, [config.outputName]);
 
 logging.info(file);
+
+// 打包完成，恢复debug导入
+debugUtils.restoreDebug();

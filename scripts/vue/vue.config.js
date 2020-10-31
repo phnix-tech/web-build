@@ -1,5 +1,7 @@
 const debugUtils = require("../debug-utils");
 debugUtils.createLocalDebugJs();
+debugUtils.restoreDebug();
+debugUtils.disableDebug();
 
 const env = require("../env");
 env.transformEnv();
