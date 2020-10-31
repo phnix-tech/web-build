@@ -1,9 +1,9 @@
 # ignore eslint cache files
-eslint/.cache_*
-eslint/.eslintcache
+.cache/.cache_*
+.cache/.eslintcache
 
 # ignore stylelint cache files
-stylelint/.stylelintcache*
+.cache/.stylelintcache*
 
 # jsdoc output
 docs/

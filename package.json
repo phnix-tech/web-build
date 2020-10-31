@@ -1,6 +1,6 @@
 {
   "name": "@web-io/build",
-  "version": "0.2.3",
+  "version": "0.3.0-dev1",
   "description": "web builds scripts",
   "author": "leejefy <050934@gmail.com>",
   "homepage": "https://gitee.com/phoenix-tech/web-build",
@@ -32,7 +32,7 @@
     "babel-fe": "babel ./fe --out-dir ./dist/fe",
     "uglify-fe": "uglifyjs ./dist/fe/Logging.js --compress --mangle --output ./dist/fe/Logging.js && uglifyjs ./dist/fe/Functions.js --compress --mangle --output ./dist/fe/Functions.js",
     "eslint": "run-p eslint-be eslint-fe",
-    "eslint-be": "eslint --ignore-pattern \"/dist/**\" --ignore-pattern \"/fe/**\" --ext js ./",
+    "eslint-be": "eslint --ignore-pattern \"/dist/**\" --ignore-pattern \"/docs/**\" --ignore-pattern \"/fe/**\" --ext js ./",
     "eslint-fe": "eslint --config ./.eslintrc-fe.js ./fe/**",
     "clean:docs": "rimraf ./docs",
     "_jsdoc": "jsdoc -c ./.jsdocrc.js",
