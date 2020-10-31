@@ -1,6 +1,7 @@
+const resolve = require("../resolve");
 // react-scripts默认打开根地址`/`
 // react-scripts/scripts/start.js
-const WebpackDevServerUtils = require("react-dev-utils/WebpackDevServerUtils");
+const WebpackDevServerUtils = require(resolve.module("react-dev-utils/WebpackDevServerUtils"));
 const {prepareUrls} = WebpackDevServerUtils;
 
 module.exports = function (publicPath) {

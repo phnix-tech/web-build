@@ -1,13 +1,13 @@
 const env = require("../env");
 env.transformEnv();
 
-const
-  paths = require("react-scripts/config/paths"),
-  {logging} = require("../web-build"),
-  resolve = require("../resolve"),
-  proxycfg = require("../proxycfg"),
-  logFn = require("../logFn"),
-  prepareUrls = require("./prepareUrls");
+const resolve = require("../resolve");
+
+const paths = require(resolve.module("react-scripts/config/paths"));
+const {logging} = require("../web-build");
+const proxycfg = require("../proxycfg");
+const logFn = require("../logFn");
+const prepareUrls = require("./prepareUrls");
 
 const bldCfg = require(resolve("./build/config"));
 const {publicPath} = bldCfg;
