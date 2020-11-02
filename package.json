@@ -1,6 +1,6 @@
 {
   "name": "@web-io/build",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "web builds scripts",
   "author": "leejefy <050934@gmail.com>",
   "homepage": "https://gitee.com/phoenix-tech/web-build",
@@ -13,9 +13,9 @@
     "portfinder": "1.0.20"
   },
   "devDependencies": {
-    "@web-io/lint": "0.4.1",
-    "@web-io/test": "0.0.2",
-    "@web-io/jsdoc": "0.0.2",
+    "@web-io/lint": "0.5.0",
+    "@web-io/test": "0.0.3",
+    "@web-io/jsdoc": "0.0.3",
     "eslint": "6.8.0",
     "mocha": "6.2.0",
     "uglify-js": "2.8.29",
@@ -32,8 +32,8 @@
     "babel-fe": "babel ./fe --out-dir ./dist/fe",
     "uglify-fe": "uglifyjs ./dist/fe/Logging.js --compress --mangle --output ./dist/fe/Logging.js && uglifyjs ./dist/fe/Functions.js --compress --mangle --output ./dist/fe/Functions.js",
     "eslint": "run-p eslint-be eslint-fe",
-    "eslint-fe": "eslint --config ./node_modules/@web-io/lint/eslint/.eslintrc-fe.js ./fe/**",
-    "eslint-be": "eslint --config ./node_modules/@web-io/lint/eslint/.eslintrc.js ./*.js ./be/** ./test/**/*.js",
+    "eslint-be": "eslint --ignore-pattern \"/dist/**\" --ignore-pattern \"/docs/**\" --ignore-pattern \"/fe/**\" --ext js ./",
+    "eslint-fe": "eslint --config ./.eslintrc-fe.js ./fe/**",
     "clean:docs": "rimraf ./docs",
     "_jsdoc": "jsdoc -c ./.jsdocrc.js",
     "jsdoc": "run-s clean:docs _jsdoc"
@@ -43,6 +43,11 @@
     "type": "git",
     "url": "https://gitee.com/phoenix-tech/web-build.git"
   },
+  "keywords": [
+    "web builds",
+    "vue cli",
+    "react scripts"
+  ],
   "engines": {
     "node": ">= 12.16.1",
     "npm": ">= 6.13.4"
