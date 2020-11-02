@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const logging = require("../fe/Logging");
 const functions = require("../functions");
+
 // 相对路径都以项目根路径为基准
 // build output dir
 const origResPath = "./dist";

@@ -1,6 +1,6 @@
 {
   "name": "@web-io/build",
-  "version": "0.3.0-dev2",
+  "version": "0.3.0",
   "description": "web builds scripts",
   "author": "leejefy <050934@gmail.com>",
   "homepage": "https://gitee.com/phoenix-tech/web-build",
@@ -43,6 +43,11 @@
     "type": "git",
     "url": "https://gitee.com/phoenix-tech/web-build.git"
   },
+  "keywords": [
+    "web builds",
+    "vue cli",
+    "react scripts"
+  ],
   "engines": {
     "node": ">= 12.16.1",
     "npm": ">= 6.13.4"
