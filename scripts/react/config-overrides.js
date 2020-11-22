@@ -113,6 +113,10 @@ module.exports = function ({
           // https://webpack.js.org/configuration/dev-server/#devserverpublicpath-
           config.publicPath = publicPath.replace(/^\.\/?/, "/");
         }
+
+        const webpackDevMock = require("../webpack-dev-mock");
+        webpackDevMock(config);
+
         logging.debug("webpack dev server config", config);
 
         // Return your customised Webpack Development Server config.

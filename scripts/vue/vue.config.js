@@ -38,6 +38,9 @@ module.exports = function ({
     devServer = {
       proxy
     };
+
+    const webpackDevMock = require("../webpack-dev-mock");
+    webpackDevMock(devServer);
   }
 
   logFn({aliasPath});
