@@ -4,6 +4,27 @@ const env = require("./env");
 const resolve = require("./resolve");
 
 /**
+ * 移除自动生成的`debug.local.[tj]s`中的自导入`import "./debug.local";`
+ * 不过实际中也没有报自导入死循环!？
+ */
+function removeDebugLocalImport (localDebugFile) {
+  // eslint-disable-next-line quotes
+  const importStatement = `import "./debug.local";`;
+  const content = fs.readFileSync(localDebugFile, "utf-8");
+  if (content.indexOf(importStatement) !== -1) {
+    fs.writeFileSync(
+      localDebugFile,
+      content
+        // 删除两行只留一个空行
+        .replace("\r\n\r\n" + importStatement, "")
+        .replace("\n\n" + importStatement, "")
+        .replace("\r\n" + importStatement, "")
+        .replace("\n" + importStatement, "")
+    );
+  }
+}
+
+/**
  * 创建本地调试js/ts文件，本地调试文件会被版本管理系统排除
  * 可用于修改前端环境变量比如切换api服务器实时调试而不用重启服务器等
  */
@@ -18,14 +39,17 @@ function createLocalDebugJs () {
   const debugTsPath = resolve("./src/debug.ts");
   const localDebugTsPath = resolve("./src/debug.local.ts");
 
-  logging.info("createLocalDebugJs");
   if (fs.existsSync(debugJsPath) && !fs.existsSync(localDebugJsPath)) {
+    logging.info("createLocalDebugJs");
     logging.debug("copy", debugJsPath, "to", localDebugJsPath);
     fs.copyFileSync(debugJsPath, localDebugJsPath);
+    removeDebugLocalImport(localDebugJsPath);
   }
   if (fs.existsSync(debugTsPath) && !fs.existsSync(localDebugTsPath)) {
+    logging.info("createLocalDebugTs");
     logging.debug("copy", debugTsPath, "to", localDebugTsPath);
     fs.copyFileSync(debugTsPath, localDebugTsPath);
+    removeDebugLocalImport(localDebugTsPath);
   }
 }
 
@@ -44,6 +68,7 @@ function disableDebug () {
       const importStatement = `import "./debug.local";`;
       const content = fs.readFileSync(debugFile, "utf-8");
       if (content.indexOf("// " + importStatement) === -1) {
+        logging.info("disable debug import in production build");
         fs.writeFileSync(
           debugFile,
           content.replace(importStatement, "// " + importStatement)
@@ -66,6 +91,7 @@ function restoreDebug () {
       const importStatement = `import "./debug.local";`;
       const content = fs.readFileSync(debugFile, "utf-8");
       if (content.indexOf("// " + importStatement) !== -1) {
+        logging.info("restore debug import after production build");
         fs.writeFileSync(
           debugFile,
           content.replace("// " + importStatement, importStatement)

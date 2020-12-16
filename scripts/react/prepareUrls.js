@@ -13,11 +13,11 @@ module.exports = function (publicPath) {
       publicPath !== "/" &&
       /^\//.test(publicPath)
     ) {
-      const url = publicPath.replace(/^\//, "");
+      const url = publicPath;
       // 支持浏览器打开publicPath url
-      urls.lanUrlForTerminal = urls.lanUrlForTerminal + url;
-      urls.localUrlForTerminal = urls.localUrlForTerminal + url;
-      urls.localUrlForBrowser = urls.localUrlForBrowser + url;
+      urls.lanUrlForTerminal = urls.lanUrlForTerminal.replace(/\/$/, "") + url;
+      urls.localUrlForTerminal = urls.localUrlForTerminal.replace(/\/$/, "") + url;
+      urls.localUrlForBrowser = urls.localUrlForBrowser.replace(/\/$/, "") + url;
     }
 
     if (

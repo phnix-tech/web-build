@@ -112,6 +112,14 @@ module.exports = function ({
           // webpack dev server publicPath必须为绝对路径
           // https://webpack.js.org/configuration/dev-server/#devserverpublicpath-
           config.publicPath = publicPath.replace(/^\.\/?/, "/");
+
+          // contentBasePublicPath和publicPath必须保持一致才可以在开发环境以`publicPath`前缀打开页面
+          if (config.publicPath !== "/") {
+            config.contentBasePublicPath = publicPath;
+            if (config.historyApiFallback) {
+              config.historyApiFallback.index = publicPath;
+            }
+          }
         }
 
         const webpackDevMock = require("../webpack-dev-mock");
