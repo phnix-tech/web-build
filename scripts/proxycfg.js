@@ -1,39 +1,39 @@
-const
-  {logging} = require("./web-build"),
-  // api代理主机
-  proxyHost = process.env.PROXY_HOST,
-  proxyRewriteFrom = process.env.PROXY_REWRITE_FROM,
-  proxyRewriteTo = process.env.PROXY_REWRITE_TO,
+const {logging} = require("./web-build");
+// api代理主机
+const proxyHost = process.env.PROXY_HOST;
+const proxyRewriteFrom = process.env.PROXY_REWRITE_FROM;
+const proxyRewriteTo = process.env.PROXY_REWRITE_TO;
 
-  // customized proxy path/host, mainly for locale dev use
-  // @type {string} regexp path string, e.g. ^/mobile/blog/article/
-  proxyPathCustomize = process.env.PROXY_PATH_CUSTOMIZE,
-  // @type {string} proxy host, e.g. http://192.168.0.111
-  proxyHostCustomize = process.env.PROXY_HOST_CUSTOMIZE,
-  // @type {string}, RegExp to match paths
-  // https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options
-  /**
-   *
-   // rewrite path
-   pathRewrite: {'^/old/api' : '/new/api'}
+// customized proxy path/host, mainly for locale dev use
+// @type {string} regexp path string, e.g. ^/mobile/blog/article/
+const proxyPathCustomize = process.env.PROXY_PATH_CUSTOMIZE;
+// @type {string} proxy host, e.g. http://192.168.0.111
+const proxyHostCustomize = process.env.PROXY_HOST_CUSTOMIZE;
+// @type {string}, RegExp to match paths
+// https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options
+/**
+ // rewrite path
+ pathRewrite: {'^/old/api' : '/new/api'}
 
-   // remove path
-   pathRewrite: {'^/remove/api' : ''}
+ // remove path
+ pathRewrite: {'^/remove/api' : ''}
 
-   // add base path
-   pathRewrite: {'^/' : '/basepath/'}
-   * @type {string}
-   */
-  proxyRewriteFromCustomize = process.env.PROXY_REWRITE_FROM_CUSTOMIZE,
-  // @type {string}
-  proxyRewriteToCustomize = process.env.PROXY_REWRITE_TO_CUSTOMIZE,
+ // add base path
+ pathRewrite: {'^/' : '/basepath/'}
 
-  // path proxy table
-  // https://github.com/chimurai/http-proxy-middleware
-  dftProxyTable = {};
+ * @type {string}
+ */
+const proxyRewriteFromCustomize = process.env.PROXY_REWRITE_FROM_CUSTOMIZE;
+// @type {string}
+const proxyRewriteToCustomize = process.env.PROXY_REWRITE_TO_CUSTOMIZE;
+
+// path proxy table
+// https://github.com/chimurai/http-proxy-middleware
+const dftProxyTable = {};
 
 /**
  * customize proxy has high priority
+ * 由于环境变量不能设置undefined, null，所以使用空字串来忽略先前的配置
  * @param customizedProxyPath
  * @param customizedProxyHost
  * @param customizedRewriteFrom
@@ -45,19 +45,32 @@ function cfgCustomizedProxy (
   customizedRewriteFrom,
   customizedRewriteTo
 ) {
+  // 去除前后空格
+  if (customizedProxyPath) {
+    customizedProxyPath = customizedProxyPath.trim();
+  }
+  if (customizedProxyHost) {
+    customizedProxyHost = customizedProxyHost.trim();
+  }
+  if (customizedRewriteFrom) {
+    customizedRewriteFrom = customizedRewriteFrom.trim();
+  }
+  if (customizedRewriteTo) {
+    customizedRewriteTo = customizedRewriteTo.trim();
+  }
+
   if (!customizedProxyPath || !customizedProxyHost) {
     return;
   }
 
-  logging.info(customizedProxyPath, "===>", customizedProxyHost);
   // comma separated proxy path & proxy host
-  const
-    pathCustomize = customizedProxyPath.split(/[,]/),
-    hostCustomize = customizedProxyHost.split(/[,]/);
+  // 可以一一映射path和host，如果proxy host没有一一设置则使用第一个host
+  const pathCustomize = customizedProxyPath.split(/[,]/);
+  const hostCustomize = customizedProxyHost.split(/[,]/);
 
   pathCustomize.forEach((regexpPath, index) => {
     // path/host 一一映射
-    let host = hostCustomize[index];
+    let host = hostCustomize[index] || hostCustomize[0];
 
     // 去除前后空格
     regexpPath = regexpPath.trim();
@@ -69,6 +82,8 @@ function cfgCustomizedProxy (
       return;
     }
 
+    logging.info(regexpPath, "===>", host);
+
     const cfg = {
       filter (pathname) {
         return new RegExp(regexpPath).test(pathname);
@@ -79,12 +94,9 @@ function cfgCustomizedProxy (
     };
 
     if (
-      customizedRewriteFrom !== undefined &&
-      customizedRewriteTo !== undefined
+      customizedRewriteFrom &&
+      customizedRewriteTo
     ) {
-      // 去除前后空格
-      customizedRewriteFrom = customizedRewriteFrom.trim();
-      customizedRewriteTo = customizedRewriteTo.trim();
 
       logging.info("path rewrite");
       logging.info(customizedRewriteFrom, "===>", customizedRewriteTo);
