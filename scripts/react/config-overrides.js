@@ -28,8 +28,8 @@ publicPath = publicPath || paths.publicUrlOrPath;
 // see `react-scripts/config/webpack.config.js` line 89
 paths.publicUrlOrPath = publicPath;
 
-// const prepareUrls = require("./prepareUrls");
-// prepareUrls(publicPath);
+const prepareUrls = require("./prepareUrls");
+prepareUrls(publicPath);
 
 const setCSSModuleLocalIndentName = require("./setCSSModuleLocalIndentName");
 function webpack (config) {

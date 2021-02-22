@@ -13,21 +13,27 @@ module.exports = function (publicPath) {
       publicPath !== "/" &&
       /^\//.test(publicPath)
     ) {
-      const url = publicPath;
-      // 支持浏览器打开publicPath url
-      urls.lanUrlForTerminal = urls.lanUrlForTerminal.replace(/\/$/, "") + url;
-      urls.localUrlForTerminal = urls.localUrlForTerminal.replace(/\/$/, "") + url;
-      urls.localUrlForBrowser = urls.localUrlForBrowser.replace(/\/$/, "") + url;
+      // lan url被react scripts去除了尾部斜线/
+      if (!urls.lanUrlForTerminal.endsWith("/")) {
+        urls.lanUrlForTerminal += "/";
+      }
+      if (!urls.localUrlForTerminal.endsWith("/")) {
+        urls.localUrlForTerminal += "/";
+      }
+      if (!urls.localUrlForBrowser.endsWith("/")) {
+        urls.localUrlForBrowser += "/";
+      }
     }
 
     if (
       urls.lanUrlForConfig &&
-      urls.lanUrlForConfig.indexOf(":") !== -1
+      urls.lanUrlForConfig.indexOf(":") === -1
     ) {
-      // https://webpack.js.org/configuration/dev-server/#devserverpublic
       // lanUrlForConfig为IP地址无端口，会传递给webpack-dev-server public选项
+      // https://webpack.js.org/configuration/dev-server/#devserverpublic
       urls.lanUrlForConfig = `${urls.lanUrlForConfig}:${port}`;
     }
+
     return urls;
   };
 };
