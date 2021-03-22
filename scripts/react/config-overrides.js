@@ -40,8 +40,7 @@ function webpack (config) {
   const aliasPath = resolve("./src");
   logFn({aliasPath});
   config.resolve.alias = {
-    "@": aliasPath,
-    "-": aliasPath
+    "@": aliasPath
   };
 
   if (config.module && config.module.rules) {

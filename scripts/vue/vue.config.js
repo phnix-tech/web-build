@@ -6,11 +6,10 @@ debugUtils.disableDebug();
 const env = require("../env");
 env.transformEnv();
 
-const
-  resolve = require("../resolve"),
-  proxycfg = require("../proxycfg"),
-  logFn = require("../logFn"),
-  chainWebpack = require("./chainWebpack");
+const resolve = require("../resolve");
+const proxycfg = require("../proxycfg");
+const logFn = require("../logFn");
+const chainWebpack = require("./chainWebpack");
 
 const config = require(resolve("./build/config"));
 
@@ -60,8 +59,7 @@ module.exports = function ({
       resolve: {
         alias: {
           // 注意vue cli内置添加了`@`别名
-          "@": aliasPath,
-          "-": aliasPath
+          "@": aliasPath
         }
       }
     },
