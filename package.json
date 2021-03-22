@@ -32,6 +32,7 @@
     "build-fe": "run-s babel-fe uglify-fe",
     "babel-fe": "babel ./fe --out-dir ./dist/fe",
     "uglify-fe": "uglifyjs ./dist/fe/Logging.js --compress --mangle --output ./dist/fe/Logging.js && uglifyjs ./dist/fe/Functions.js --compress --mangle --output ./dist/fe/Functions.js",
+    "lint": "run-p eslint",
     "eslint": "run-p eslint-be eslint-fe",
     "eslint-be": "eslint --ignore-pattern \"/dist/**\" --ignore-pattern \"/docs/**\" --ignore-pattern \"/fe/**\" --ext .js ./",
     "eslint-fe": "eslint --config ./.eslintrc-fe.js ./fe/**",
@@ -42,7 +43,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/phoenix-tech/web-build.git"
+    "url": "git@gitee.com:phoenix-tech/web-build.git"
   },
   "keywords": [
     "web builds",
