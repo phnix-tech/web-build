@@ -82,6 +82,7 @@ module.exports = function ({
         }
       }
     },
+    // https://cli.vuejs.org/zh/config/#devserver
     devServer
   };
 };
