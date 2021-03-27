@@ -13,7 +13,7 @@ module.exports = function ({
   }
 
   if (aliasPath) {
-    logging.info(`@/- alias path ${aliasPath}`);
+    logging.info(`@ alias path ${aliasPath}`);
   }
 
   if (publicPath) {

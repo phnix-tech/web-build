@@ -4,6 +4,7 @@ debugUtils.restoreDebug();
 debugUtils.disableDebug();
 
 const env = require("../env");
+// 需先转换环境变量
 env.transformEnv();
 
 const resolve = require("../resolve");
@@ -12,15 +13,23 @@ const paths = require(resolve.module("react-scripts/config/paths"));
 const {logging} = require("../web-build");
 const proxycfg = require("../proxycfg");
 const logFn = require("../logFn");
-const prepareUrls = require("./prepareUrls");
 
 const bldCfg = require(resolve("./build/config"));
-const {publicPath} = bldCfg;
+let {publicPath} = bldCfg;
 
 // 修改CRA build输出目录
 // https://segmentfault.com/q/1010000019904178/
 const outputDir = resolve(`dist/${bldCfg.outputName}`);
 paths.appBuild = outputDir;
+
+// 使用相对路径引用资源文件, 默认为`/`
+publicPath = publicPath || paths.publicUrlOrPath;
+// 注：不能单独修改webpack output publicPath，不然会导致css资源引用相对路径错误
+// see `react-scripts/config/webpack.config.js` line 89
+paths.publicUrlOrPath = publicPath;
+
+const prepareUrls = require("./prepareUrls");
+prepareUrls(publicPath);
 
 const setCSSModuleLocalIndentName = require("./setCSSModuleLocalIndentName");
 function webpack (config) {
@@ -31,8 +40,7 @@ function webpack (config) {
   const aliasPath = resolve("./src");
   logFn({aliasPath});
   config.resolve.alias = {
-    "@": aliasPath,
-    "-": aliasPath
+    "@": aliasPath
   };
 
   if (config.module && config.module.rules) {
@@ -59,17 +67,11 @@ function webpack (config) {
     }
   }
 
-  // 使用相对路径引用资源文件, 默认为`/`
-  if (publicPath) {
-    config.output.publicPath = publicPath;
-  }
   logFn({publicPath});
   logFn({outputDir});
 
   return config;
 }
-
-prepareUrls(publicPath);
 
 /**
  * create-react-app配置重写
@@ -105,8 +107,10 @@ module.exports = function ({
           proxy = proxy || {};
           proxy[key.replace(/^\^/, "")] = proxyTable[key];
         });
+
         // Create the default config by calling configFunction with the proxy/allowedHost parameters
         const config = configFunction(proxy, allowedHost);
+
         // react-scripts开发服务器默认强制serve在根地址`/`
         if (publicPath) {
           // webpack dev server publicPath必须为绝对路径

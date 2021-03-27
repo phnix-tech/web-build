@@ -1,6 +1,6 @@
 {
   "name": "@web-io/build",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "web builds scripts",
   "author": "leejefy <050934@gmail.com>",
   "homepage": "https://gitee.com/phoenix-tech/web-build",
@@ -32,8 +32,9 @@
     "build-fe": "run-s babel-fe uglify-fe",
     "babel-fe": "babel ./fe --out-dir ./dist/fe",
     "uglify-fe": "uglifyjs ./dist/fe/Logging.js --compress --mangle --output ./dist/fe/Logging.js && uglifyjs ./dist/fe/Functions.js --compress --mangle --output ./dist/fe/Functions.js",
+    "lint": "run-p eslint",
     "eslint": "run-p eslint-be eslint-fe",
-    "eslint-be": "eslint --ignore-pattern \"/dist/**\" --ignore-pattern \"/docs/**\" --ignore-pattern \"/fe/**\" --ext js ./",
+    "eslint-be": "eslint --ignore-pattern \"/dist/**\" --ignore-pattern \"/docs/**\" --ignore-pattern \"/fe/**\" --ext .js ./",
     "eslint-fe": "eslint --config ./.eslintrc-fe.js ./fe/**",
     "clean:docs": "rimraf ./docs",
     "_jsdoc": "jsdoc -c ./.jsdocrc.js",
@@ -42,7 +43,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/phoenix-tech/web-build.git"
+    "url": "git@gitee.com:phoenix-tech/web-build.git"
   },
   "keywords": [
     "web builds",

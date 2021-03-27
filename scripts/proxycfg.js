@@ -1,129 +1,51 @@
-const
-  {logging} = require("./web-build"),
-  // api代理主机
-  proxyHost = process.env.PROXY_HOST,
-  proxyRewriteFrom = process.env.PROXY_REWRITE_FROM,
-  proxyRewriteTo = process.env.PROXY_REWRITE_TO,
+const {logging} = require("./web-build");
 
-  // customized proxy path/host, mainly for locale dev use
-  // @type {string} regexp path string, e.g. ^/mobile/blog/article/
-  proxyPathCustomize = process.env.PROXY_PATH_CUSTOMIZE,
-  // @type {string} proxy host, e.g. http://192.168.0.111
-  proxyHostCustomize = process.env.PROXY_HOST_CUSTOMIZE,
-  // @type {string}, RegExp to match paths
-  // https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options
-  /**
-   *
-   // rewrite path
-   pathRewrite: {'^/old/api' : '/new/api'}
-
-   // remove path
-   pathRewrite: {'^/remove/api' : ''}
-
-   // add base path
-   pathRewrite: {'^/' : '/basepath/'}
-   * @type {string}
-   */
-  proxyRewriteFromCustomize = process.env.PROXY_REWRITE_FROM_CUSTOMIZE,
-  // @type {string}
-  proxyRewriteToCustomize = process.env.PROXY_REWRITE_TO_CUSTOMIZE,
-
-  // path proxy table
-  // https://github.com/chimurai/http-proxy-middleware
-  dftProxyTable = {};
+// API代理主机
+const proxyHost = process.env.PROXY_HOST;
+// API URL重写
+const proxyRewriteFrom = process.env.PROXY_REWRITE_FROM;
+const proxyRewriteTo = process.env.PROXY_REWRITE_TO;
 
 /**
- * customize proxy has high priority
- * @param customizedProxyPath
- * @param customizedProxyHost
- * @param customizedRewriteFrom
- * @param customizedRewriteTo
+ * customized proxy path, mainly for locale dev use
+ *
+ * @type {string} regexp path string, e.g. ^/mobile/blog/article/
  */
-function cfgCustomizedProxy (
-  customizedProxyPath,
-  customizedProxyHost,
-  customizedRewriteFrom,
-  customizedRewriteTo
-) {
-  if (!customizedProxyPath || !customizedProxyHost) {
-    return;
-  }
+const proxyPathCustomize = process.env.PROXY_PATH_CUSTOMIZE;
+/**
+ * customized proxy host, e.g. http://192.168.0.111
+ *
+ * @type {string}
+ */
+const proxyHostCustomize = process.env.PROXY_HOST_CUSTOMIZE;
 
-  logging.info(customizedProxyPath, "===>", customizedProxyHost);
-  // comma separated proxy path & proxy host
-  const
-    pathCustomize = customizedProxyPath.split(/[,]/),
-    hostCustomize = customizedProxyHost.split(/[,]/);
+/**
+ * rewrite path
+ * pathRewrite: {'^/old/api' : '/new/api'}
+ *
+ * remove path
+ * pathRewrite: {'^/remove/api' : ''}
+ *
+ * add base path
+ * pathRewrite: {'^/' : '/basepath/'}
+ *
+ * @type {string} RegExp to match paths
+ * @see https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options
+ */
+const proxyRewriteFromCustomize = process.env.PROXY_REWRITE_FROM_CUSTOMIZE;
+// @type {string}
+const proxyRewriteToCustomize = process.env.PROXY_REWRITE_TO_CUSTOMIZE;
 
-  pathCustomize.forEach((regexpPath, index) => {
-    // path/host 一一映射
-    let host = hostCustomize[index];
-
-    // 去除前后空格
-    regexpPath = regexpPath.trim();
-    if (host) {
-      host = host.trim();
-    }
-
-    if (!regexpPath || !host) {
-      return;
-    }
-
-    const cfg = {
-      filter (pathname) {
-        return new RegExp(regexpPath).test(pathname);
-      },
-      target: host,
-      secure: false,
-      changeOrigin: true
-    };
-
-    if (
-      customizedRewriteFrom !== undefined &&
-      customizedRewriteTo !== undefined
-    ) {
-      // 去除前后空格
-      customizedRewriteFrom = customizedRewriteFrom.trim();
-      customizedRewriteTo = customizedRewriteTo.trim();
-
-      logging.info("path rewrite");
-      logging.info(customizedRewriteFrom, "===>", customizedRewriteTo);
-      cfg.pathRewrite = {
-        [customizedRewriteFrom]: customizedRewriteTo
-      };
-    }
-
-    dftProxyTable[regexpPath] = cfg;
-  });
-}
-
-cfgCustomizedProxy(
-  proxyPathCustomize,
-  proxyHostCustomize,
-  proxyRewriteFromCustomize,
-  proxyRewriteToCustomize
-);
-
-// PROXY_PATH_CUSTOMIZE_N
-// PROXY_HOST_CUSTOMIZE_N
-// PROXY_REWRITE_FROM_CUSTOMIZE_N
-// PROXY_REWRITE_TO_CUSTOMIZE_N
-Object.keys(process.env)
-  .filter(env => env && env.startsWith("PROXY_PATH_CUSTOMIZE_"))
-  .forEach(proxyPathKey => {
-    const
-      customizedProxyPath = process.env[proxyPathKey],
-      customizedProxyHost = process.env[proxyPathKey.replace("_PATH_", "_HOST_")],
-      customizedRewriteFrom = process.env[proxyPathKey.replace("_PATH_", "_REWRITE_FROM_")],
-      customizedRewriteTo = process.env[proxyPathKey.replace("_PATH_", "_REWRITE_TO_")];
-
-    cfgCustomizedProxy(
-      customizedProxyPath,
-      customizedProxyHost,
-      customizedRewriteFrom,
-      customizedRewriteTo
-    );
-  });
+const DFT_PROXY_OPT = {
+  secure: false,
+  changeOrigin: true
+};
+/**
+ * path proxy table
+ *
+ * @see https://github.com/chimurai/http-proxy-middleware
+ */
+const dftProxyTable = {};
 
 const DFT_API_PREFIX = "^/api/";
 if (proxyHost) {
@@ -133,61 +55,39 @@ if (proxyHost) {
   });
 }
 
-/**
- * convert proxy option to http-proxy-middleware option
- * @see https://github.com/chimurai/http-proxy-middleware
- * @param proxyTable {object|*}
- * @returns {*|{}}
- */
-function convert (proxyTable) {
-  proxyTable = proxyTable || {};
-  Object.keys(proxyTable).forEach(context => {
-    let options = proxyTable[context];
-    if (typeof options === "string") {
-      options = {
-        target: options,
-        secure: false,
-        changeOrigin: true
-      };
+// 单条自定义代理处理
+cfgCustomizedProxy(
+  proxyPathCustomize,
+  proxyHostCustomize,
+  proxyRewriteFromCustomize,
+  proxyRewriteToCustomize
+);
 
-      if (
-        proxyRewriteFrom !== undefined &&
-        proxyRewriteTo !== undefined
-      ) {
-        options[proxyRewriteFrom.trim()] = proxyRewriteTo.trim();
-      }
-    }
+// 多条自定义代理处理
+// PROXY_PATH_CUSTOMIZE_N
+// PROXY_HOST_CUSTOMIZE_N
+// PROXY_REWRITE_FROM_CUSTOMIZE_N
+// PROXY_REWRITE_TO_CUSTOMIZE_N
+Object.keys(process.env)
+  .filter(env => env && env.startsWith("PROXY_PATH_CUSTOMIZE_"))
+  .forEach(proxyPathKey => {
+    const customizedProxyPath = process.env[proxyPathKey];
+    const customizedProxyHost = process.env[proxyPathKey.replace("_PATH_", "_HOST_")];
+    const customizedRewriteFrom = process.env[proxyPathKey.replace("_PATH_", "_REWRITE_FROM_")];
+    const customizedRewriteTo = process.env[proxyPathKey.replace("_PATH_", "_REWRITE_TO_")];
 
-    proxyTable[context] = options;
+    cfgCustomizedProxy(
+      customizedProxyPath,
+      customizedProxyHost,
+      customizedRewriteFrom,
+      customizedRewriteTo
+    );
   });
-
-  return proxyTable;
-}
 
 convert(dftProxyTable);
 
 /**
- * 通过环境变量指定api路径代理
- * PROXY_HOST
- * PROXY_REWRITE_FROM
- * PROXY_REWRITE_TO
- * PROXY_PATH_CUSTOMIZE
- * PROXY_HOST_CUSTOMIZE
- * PROXY_REWRITE_FROM_CUSTOMIZE
- * PROXY_REWRITE_TO_CUSTOMIZE
- * PROXY_PATH_CUSTOMIZE_N
- * PROXY_HOST_CUSTOMIZE_N
- * PROXY_REWRITE_FROM_CUSTOMIZE_N
- * PROXY_REWRITE_TO_CUSTOMIZE_N
- * @example
- * PROXY_PATH_CUSTOMIZE=^/mobile/blog/article/
- * PROXY_HOST_CUSTOMIZE=http://192.168.0.203:8082
- * PROXY_REWRITE_FROM_CUSTOMIZE=^/api/mobile/blog/article/
- * PROXY_REWRITE_TO_CUSTOMIZE=/mobile/blog/article/
- * PROXY_PATH_CUSTOMIZE_1=^/books/
- * PROXY_HOST_CUSTOMIZE_1=http://192.168.0.203:8082
- * PROXY_REWRITE_FROM_CUSTOMIZE_1=^/api/books/
- * PROXY_REWRITE_TO_CUSTOMIZE_1=
+ * @see https://gitee.com/phoenix-tech/web-build/wikis/Proxy%20Config
  * @type {{proxyTable(*=): *, proxyHost: *}}
  */
 module.exports = {
@@ -200,8 +100,9 @@ module.exports = {
 
     const table = {};
     if (withDftProxyTable) {
-      if (dftApiPrefix !== DFT_API_PREFIX) {
-        dftProxyTable[dftApiPrefix] = dftProxyTable[DFT_API_PREFIX];
+      const dftProxyOpt = dftProxyTable[DFT_API_PREFIX];
+      if (dftProxyOpt && dftApiPrefix !== DFT_API_PREFIX) {
+        dftProxyTable[dftApiPrefix] = dftProxyOpt;
         delete dftProxyTable[DFT_API_PREFIX];
       }
       Object.assign(table, dftProxyTable);
@@ -216,3 +117,111 @@ module.exports = {
   },
   proxyHost
 };
+
+/**
+ * customize proxy has high priority
+ * 由于环境变量不能设置`undefined`, `null`，所以使用空字串来忽略先前的配置
+ *
+ * @param customizedProxyPath
+ * @param customizedProxyHost
+ * @param customizedRewriteFrom
+ * @param customizedRewriteTo
+ */
+function cfgCustomizedProxy (
+  customizedProxyPath,
+  customizedProxyHost,
+  customizedRewriteFrom,
+  customizedRewriteTo
+) {
+  // 去除前后空格
+  if (customizedProxyPath) {
+    customizedProxyPath = customizedProxyPath.trim();
+  }
+  if (customizedProxyHost) {
+    customizedProxyHost = customizedProxyHost.trim();
+  }
+  if (customizedRewriteFrom) {
+    customizedRewriteFrom = customizedRewriteFrom.trim();
+  }
+  if (customizedRewriteTo) {
+    customizedRewriteTo = customizedRewriteTo.trim();
+  }
+
+  if (!customizedProxyPath || !customizedProxyHost) {
+    return;
+  }
+
+  // comma separated proxy path & host
+  const pathCustomize = customizedProxyPath.split(/[,]/);
+  const hostCustomize = customizedProxyHost.split(/[,]/);
+  const rewriteFromCustomize = customizedRewriteFrom && customizedRewriteFrom.split(/[,]/);
+  const rewriteToCustomize = customizedRewriteTo && customizedRewriteTo.split(/[,]/);
+
+  pathCustomize.forEach((regexpPath, index) => {
+    // path/host 一一映射，如果proxy host没有一一设置则使用第一个host
+    let host = hostCustomize[index] || hostCustomize[0];
+
+    // 去除前后空格
+    regexpPath = regexpPath.trim();
+    if (host) {
+      host = host.trim();
+    }
+
+    if (!regexpPath || !host) {
+      return;
+    }
+
+    logging.info(regexpPath, "===>", host);
+
+    const cfg = {
+      target: host,
+      ...DFT_PROXY_OPT
+    };
+
+    const rewriteFrom = rewriteFromCustomize && (rewriteFromCustomize[index] || rewriteFromCustomize[0]);
+    const rewriteTo = rewriteToCustomize && (rewriteToCustomize[index] || rewriteToCustomize[0]);
+    if (rewriteFrom && rewriteTo) {
+      logging.info("path rewrite");
+      logging.info(rewriteFrom, "===>", rewriteTo);
+      cfg.pathRewrite = {
+        [rewriteFrom]: rewriteTo
+      };
+    }
+
+    dftProxyTable[regexpPath] = cfg;
+  });
+}
+
+/**
+ * convert proxy option to http-proxy-middleware option
+ *
+ * @see https://github.com/chimurai/http-proxy-middleware
+ * @param proxyTable {object|*}
+ * @returns {*|{}}
+ */
+function convert (proxyTable) {
+  proxyTable = proxyTable || {};
+
+  Object.keys(proxyTable).forEach(context => {
+    let options = proxyTable[context];
+    if (typeof options === "string") {
+      options = {
+        target: options,
+        ...DFT_PROXY_OPT
+      };
+
+      if (
+        proxyRewriteFrom &&
+        proxyRewriteTo
+      ) {
+        options.pathRewrite = {
+          [proxyRewriteFrom]: proxyRewriteTo
+        };
+      }
+    }
+
+    proxyTable[context] = options;
+  });
+
+  return proxyTable;
+}
