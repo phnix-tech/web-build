@@ -1,2 +1,2 @@
-const configOverrides = require("../../lib/scripts/vue/config-overrides");
+const configOverrides = require("../../lib/scripts/react/config-overrides");
 module.exports = configOverrides;

@@ -11,13 +11,13 @@ interface Resolve {
 /**
  * git子模块引用：假设当前路径为`src/common/build`
  * npm包引用：假设当前位置
- * `node_modules/@web-io/build/scripts`或
- * `node_modules/@web-io/common/build`
+ * `node_modules/@web-io/build/lib/scripts`或
+ * `node_modules/@web-io/common/lib/build`
  */
 let projectRoot = path.join(__dirname, "../../..");
 // npm包引用
-if (path.basename(projectRoot) === "node_modules") {
-  projectRoot = path.join(projectRoot, "..");
+if (projectRoot.includes("/node_modules/")) {
+  projectRoot = path.join(projectRoot, "../..");
 }
 
 /**
@@ -43,6 +43,8 @@ resolve.module = function (...modulePath: string[]) {
 
 /**
  * `require` alias function
+ * 注意：传递绝对路径模块路径，相对路径会相对于`resolve`文件所在路径，可能跟预期不一样
+ * 可以使用`require.resolve`解析相对路径为绝对路径
  *
  * @param modulePath
  * @returns

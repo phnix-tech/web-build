@@ -133,7 +133,7 @@ export = function ({
           }
         }
 
-        const webpackDevMock = resolve.require("../webpack-dev-mock");
+        const webpackDevMock = resolve.require(require.resolve("../webpack-dev-mock"));
         webpackDevMock(config);
 
         logging.debug("webpack dev server config", config);

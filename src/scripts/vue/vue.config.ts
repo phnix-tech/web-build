@@ -44,7 +44,7 @@ export = function ({
       proxy
     };
 
-    const webpackDevMock = resolve.require("../webpack-dev-mock");
+    const webpackDevMock = resolve.require(require.resolve("../webpack-dev-mock"));
     webpackDevMock(devServer);
   }
 
