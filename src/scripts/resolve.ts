@@ -1,8 +1,10 @@
 import path from "path";
+import type {Any} from "../types";
 
 interface Resolve {
   (...dirPath: string[]): string;
   module: (...modulePath: string[]) => string;
+  require: <T = Any>(modulePath: string) => T;
   projectRoot?: string;
 }
 
@@ -37,6 +39,19 @@ const resolve: Resolve = function (...dirPath: string[]) {
  */
 resolve.module = function (...modulePath: string[]) {
   return resolve("node_modules", ...modulePath);
+};
+
+/**
+ * `require` alias function
+ *
+ * @param modulePath
+ * @returns
+ */
+resolve.require = function <T = Any>(modulePath: string) {
+  // error  Require statement not part of import statement  @typescript-eslint/no-var-requires
+  // error  A `require()` style import is forbidden         @typescript-eslint/no-require-imports
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
+  return require(modulePath) as T;
 };
 
 /**

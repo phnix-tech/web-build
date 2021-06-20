@@ -1,17 +1,8 @@
+import type {Proxy} from "./types/ProxyTable";
+import type ProxyTable from "./types/ProxyTable";
 import webBuild from "./web-build";
 
 const {logging} = webBuild;
-
-interface Proxy {
-  target: string;
-  secure?: boolean;
-  changeOrigin?: boolean;
-  pathRewrite?: Record<string, string>;
-}
-
-interface ProxyTable extends Record<string, Proxy> {
-
-}
 
 // API代理主机
 const proxyHost = process.env.PROXY_HOST;
@@ -125,7 +116,7 @@ export = {
     return {
       ...table,
       ...convert(proxyTable)
-    };
+    } as ProxyTable;
   },
   proxyHost
 };
