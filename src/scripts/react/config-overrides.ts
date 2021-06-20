@@ -48,26 +48,24 @@ function webpack (config: WebpackConfig) {
     "@": aliasPath
   };
 
-  if (config.module && config.module.rules) {
-    // 删除react-scripts eslint loader，我们使用自己的eslint配置
-    // see `react-scripts/config/webpack.config.js`
+  if (config.module?.rules) {
     const {rules} = config.module;
-    rules.splice(1, 1);
 
     // 开启babelrc
     // https://blog.csdn.net/weixin_39836173/article/details/86110011
     // https://github.com/ant-design/babel-plugin-import
-    const rule = config.module.rules[1];
+    // see `react-scripts/config/webpack.config.js`
+    const rule = rules[1];
     const babelLoader = rule.oneOf && rule.oneOf[1];
 
-    if (babelLoader && babelLoader.options) {
+    if (babelLoader?.options) {
       babelLoader.options.babelrc = true;
     }
 
     if (env.isProd()) {
       // react-scripts/config/webpack.config.js
-      const cssModuleRule = rule.oneOf && rule.oneOf[4];
-      const sassModuleRule = rule.oneOf && rule.oneOf[6];
+      const cssModuleRule = rule.oneOf && rule.oneOf[5];
+      const sassModuleRule = rule.oneOf && rule.oneOf[7];
       setCSSModuleLocalIndentName([cssModuleRule, sassModuleRule]);
     }
   }

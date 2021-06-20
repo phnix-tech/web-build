@@ -28,6 +28,7 @@ export default interface WebpackConfig {
         {options: {babelrc: boolean;};},
         unknown,
         unknown,
+        unknown,
         Rule,
         unknown,
         Rule
