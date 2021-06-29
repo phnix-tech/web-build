@@ -16,7 +16,7 @@ interface Resolve {
  */
 let projectRoot = path.join(__dirname, "../../..");
 // npm包引用
-if (projectRoot.includes("/node_modules/")) {
+if (projectRoot.includes(`${path.sep}node_modules${path.sep}`)) {
   projectRoot = path.join(projectRoot, "../..");
 }
 
