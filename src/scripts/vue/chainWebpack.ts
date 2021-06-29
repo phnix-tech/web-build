@@ -17,19 +17,17 @@ type HtmlPluginArgs = Args<HtmlPluginArg>;
  * @param config
  */
 function htmlWebpackPlugin (config: ChainWebpackConfig) {
-  config
-    .plugin("html")
-    ?.tap<HtmlPluginArgs>(args => {
-      const minify = args && args[0] && args[0].minify;
-      if (minify && env.isProd()) {
-        // https://github.com/kangax/html-minifier#options-quick-reference
-        Object.assign(minify, {
-          minifyCSS: true,
-          minifyJS: true
-        });
-      }
-      return args;
-    });
+  config.plugin("html")?.tap<HtmlPluginArgs>(args => {
+    const minify = args && args[0] && args[0].minify;
+    if (minify && env.isProd()) {
+      // https://github.com/kangax/html-minifier#options-quick-reference
+      Object.assign(minify, {
+        minifyCSS: true,
+        minifyJS: true
+      });
+    }
+    return args;
+  });
 }
 
 /**
