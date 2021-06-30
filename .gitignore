@@ -13,3 +13,9 @@ yarn-error.log*
 
 # jsdoc output
 docs/
+
+# build output
+lib/
+
+# npm pack file
+/*.tgz

@@ -1,8 +1,2 @@
-const logging = require("../fe/Logging");
-const functions = require("../functions");
-
-// web builds external deps
-module.exports = {
-  logging,
-  functions
-};
+const webBuild = require("../lib/scripts/web-build");
+module.exports = webBuild;
