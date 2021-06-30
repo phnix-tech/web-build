@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 (2021-06-30)
+
+* chore: [support react-scripts 4.0](https://gitee.com/phoenix-tech/web-build/issues/I25JFH)
+* build: config ts support
+* refactor: build scripts to ts
+* chore: upgrade @web-io/lint to 1.0.0
+* docs: add CHANGELOG
+
 ## 0.4.2 (2021-03-28)
 
 * chore: 统一web common和web build resolve函数
