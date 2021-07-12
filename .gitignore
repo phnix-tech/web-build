@@ -10,3 +10,9 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# build output
+lib/
+
+# npm pack file
+/*.tgz

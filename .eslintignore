@@ -1,0 +1,10 @@
+# http://eslint.cn/docs/user-guide/configuring#ignoring-files-and-directories
+
+!.*.ts
+!.*.js
+
+lib/**
+dist/**
+fe/**
+!fe/**/*.ts
+docs/**
