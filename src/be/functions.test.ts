@@ -1,17 +1,14 @@
 import path from "path";
 import fs from "fs";
 import assert from "assert";
-import {describe, it} from "mocha";
-import logging from "../fe/Logging";
-import fn from "../functions";
-import feFn from "../fe/Functions";
+import logging from "../../fe/Logging";
+import fn from "../../be/functions";
 
 describe("be/functions", () => {
   describe("#createMeta", () => {
-    const
-      metaFile = path.join(__dirname, "./meta.json"),
-      metaFile1 = path.join(__dirname, "./meta1.json"),
-      metaFile2 = path.join(__dirname, "./meta2.json");
+    const metaFile = path.join(__dirname, "./meta.json");
+    const metaFile1 = path.join(__dirname, "./meta1.json");
+    const metaFile2 = path.join(__dirname, "./meta2.json");
 
     it(`${metaFile} will be created`, () => {
       fn.createMeta(metaFile);
@@ -26,12 +23,11 @@ describe("be/functions", () => {
       });
     });
 
-    const
-      customizedData = {
-        foo: true,
-        haha: "test",
-        boo: 123
-      };
+    const customizedData = {
+      foo: true,
+      haha: "test",
+      boo: 123
+    };
 
     it(`${metaFile1}, ${metaFile2} will be created`, () => {
       fn.createMeta({
@@ -39,7 +35,8 @@ describe("be/functions", () => {
         meta () {
           logging.info("haha log test info");
           logging.debug("haha log test debug");
-          logging.warn("haha log test warn");
+          // warn message will be print stack trace
+          // logging.warn("haha log test warn");
           logging.log("haha log test log");
           // logging.error("haha log test error");
           return customizedData;
@@ -56,26 +53,6 @@ describe("be/functions", () => {
       [metaFile, metaFile1, metaFile2].forEach(f => {
         fs.unlinkSync(f);
       });
-    });
-  });
-});
-
-describe("fe/Functions", () => {
-  describe("#encodeStr", () => {
-    const
-      code = 123,
-      str = "YIR-afbgch";
-    it(`${code} encodeStr should be ${str}`, () => {
-      assert.strictEqual(feFn.encodeStr(code), str);
-    });
-  });
-
-  describe("#decodeStr", () => {
-    const
-      code = 123,
-      str = "YIR-afbgch";
-    it(`${str} decodeStr should be ${code}`, () => {
-      assert.strictEqual(feFn.decodeStr(str), code.toString());
     });
   });
 });
