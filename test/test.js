@@ -61,56 +61,6 @@ describe("be/functions", () => {
 });
 
 describe("fe/Functions", () => {
-  describe("#isValidEmail", () => {
-    const email = "jefy.lee@garmin.com";
-    it(`${email} is true`, () => {
-      assert.strictEqual(feFn.isValidEmail(email), true);
-    });
-
-    const email1 = "jefy.lee@126";
-    it(`${email1} is false`, () => {
-      assert.strictEqual(feFn.isValidEmail(email1), false);
-    });
-
-    const email2 = "jefy.lee@126.co";
-    it(`${email2} is true`, () => {
-      assert.strictEqual(feFn.isValidEmail(email2), true);
-    });
-  });
-
-  describe("#isUrlFormat", () => {
-    const url = "https://localhost:8081";
-    it(`${url} is true`, () => {
-      assert.strictEqual(feFn.isUrlFormat(url), true);
-    });
-
-    const url1 = "htt://sports.garmin.cn:8081";
-    it(`${url1} is false`, () => {
-      assert.strictEqual(feFn.isUrlFormat(url1), false);
-    });
-  });
-
-  describe("#isDomainFormat", () => {
-    const domain = "localhost.com";
-    it(`${domain} is true`, () => {
-      assert.strictEqual(feFn.isDomainFormat(domain), true);
-    });
-
-    const domain1 = "//localhost:8081";
-    it(`${domain1} is false`, () => {
-      assert.strictEqual(feFn.isDomainFormat(domain1), false);
-    });
-  });
-
-  describe("#uuid", () => {
-    const
-      pattern = /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}/,
-      uuid = feFn.uuid();
-    it(`${uuid} should match pattern ${pattern.source}`, () => {
-      assert.strictEqual(pattern.test(uuid), true);
-    });
-  });
-
   describe("#encodeStr", () => {
     const
       code = 123,
