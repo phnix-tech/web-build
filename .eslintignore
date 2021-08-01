@@ -4,7 +4,5 @@
 !.*.js
 
 lib/**
-dist/**
-fe/**
-!fe/**/*.ts
+
 docs/**

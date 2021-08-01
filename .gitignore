@@ -11,7 +11,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 
-# jsdoc output
+# docs output
 docs/
 
 # build output

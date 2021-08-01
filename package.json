@@ -6,23 +6,16 @@
   "homepage": "https://gitee.com/phoenix-tech/web-build",
   "scripts": {
     "clean": "rimraf ./lib",
-    "build": "run-s pre-build build-task",
+    "build": "run-s clean pre-build build-task",
     "test": "npx web-io-jest",
     "check-versions": "node ./build/check-versions.js",
-    "pre-build": "run-s check-versions eslint test",
-    "build-task": "run-p jsdoc build-ts",
+    "pre-build": "run-s check-versions lint test",
+    "build-task": "run-p build-ts",
     "build-ts": "tsc --project ./tsconfig.json",
     "lint": "run-p eslint",
     "lint:fix": "run-p eslint:fix",
-    "eslint": "run-p eslint-be eslint-fe",
-    "eslint:fix": "run-p eslint-be:fix eslint-fe:fix",
-    "eslint-be": "eslint --ext .js,.ts ./",
-    "eslint-fe": "eslint --no-ignore --config ./.eslintrc-fe.js --ext .js ./fe",
-    "eslint-be:fix": "eslint --fix --ext .js,.ts ./",
-    "eslint-fe:fix": "eslint --fix --no-ignore --config ./.eslintrc-fe.js --ext .js ./fe",
-    "clean:docs": "rimraf ./docs",
-    "_jsdoc": "jsdoc -c ./.jsdocrc.js",
-    "jsdoc": "run-s clean:docs _jsdoc"
+    "eslint": "eslint --cache --cache-location ./node_modules/.cache/.eslintcache --ext .js,.ts ./",
+    "eslint:fix": "eslint --fix --cache --cache-location ./node_modules/.cache/.eslintcache --ext .js,.ts ./"
   },
   "dependencies": {
     "mkdirp": "0.5.1",
@@ -31,7 +24,8 @@
     "semver": "5.6.0",
     "shelljs": "0.8.3",
     "portfinder": "1.0.20",
-    "webpack-dev-mock": "1.0.1"
+    "webpack-dev-mock": "1.0.1",
+    "@web-io/common": "file:deps/web-io-common-1.2.0-dev1.tgz"
   },
   "devDependencies": {
     "typescript": "4.3.5",
@@ -40,14 +34,12 @@
     "npm-run-all": "4.1.5",
     "rimraf": "3.0.2",
     "@web-io/lint": "1.0.0",
-    "@web-io/jsdoc": "0.0.3",
     "@web-io/jest": "file:deps/web-io-jest-1.0.0-dev3.tgz"
   },
   "files": [
     "lib",
     "be",
     "build",
-    "fe",
     "scripts",
     "functions.js"
   ],

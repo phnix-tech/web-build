@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import assert from "assert";
-import logging from "../../fe/Logging";
+import logging from "@web-io/common/lib/utils/logging";
 import fn from "../../be/functions";
 
 describe("be/functions", () => {
